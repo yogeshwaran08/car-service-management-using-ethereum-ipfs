@@ -3,6 +3,7 @@ pragma experimental ABIEncoderV2;
 
 contract CarServiceContract{
     uint serviceCount = 0;
+    address public owner;
 
     struct Service{
         uint id;
@@ -13,10 +14,15 @@ contract CarServiceContract{
     mapping(uint => Service) public services;
 
     constructor () public {
-        addService("123456789", "hash1");
+        owner = msg.sender;
     }
 
-    function addService(string memory _vin, string memory _hash)public {
+    modifier onlyOwner(){
+        require(msg.sender == owner, "Access denied");
+        _;
+    }
+
+    function addService(string memory _vin, string memory _hash) public onlyOwner {
         services[serviceCount] = Service(serviceCount, _vin, _hash);
         serviceCount++;
     }

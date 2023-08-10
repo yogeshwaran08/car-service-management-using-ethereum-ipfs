@@ -12,7 +12,7 @@ import NavBar from './Components/NavBar';
 
 const Main = () => {
     
-    const contractAddress = "0x39FAe01424Ed9720B084D29f265332389423C10D";
+    const contractAddress = "0x2212c779A7d03B46ae697F2851aA9aB1bA54Aae3";
     const abi = CarService_abi.abi;
     //web3.storage api token
     const web3StorageApi = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUxZDIxNmY4YWE0RmNGMDFCODE4RkMyQTgyMDAyQjhBQ0ExMjMxQjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTE1Njk1Njc1NjAsIm5hbWUiOiJDYXJTZXJ2aWNlIn0.0ynNnu9b1__XYH_CYB9AeymkOD67gIIDGrGKQsqQBGw";
@@ -24,7 +24,6 @@ const Main = () => {
     const [errorMesage, setErrorMessage] = useState("")
     const [cid, setCid] = useState("");
     const [searchVIN, setSearchVIN] = useState("");
-    const [tabIndex, setTabIndex] = useState();
     
     const [uploadData, setUploadData] = useState({
         vin : "",
@@ -56,6 +55,20 @@ const Main = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(uploadData);
+        setUploadData({
+            vin : "",
+            model_type : "",
+            version : "",
+            color : "",
+            country : "",
+            dealer_code : "",
+            dealer : "",
+            ro : "",
+            odometer : 0,
+            part_number : "",
+            part_name : "",
+            technician_description : "",
+        })
         uploadFiles();
     }
 
@@ -74,6 +87,7 @@ const Main = () => {
     const handAccountChange =  (request) => {
         setDefaultAccount(request);
         setBtnTxt("Connected");
+        setErrorMessage("Connected")
     }
 
     const uploadFiles = async () => {
@@ -96,8 +110,14 @@ const Main = () => {
         let tempSigner = tempProvider.getSigner();
         let tempContract = new ethers.Contract(contractAddress, abi, tempSigner);
         // uploading cid and vin to blockchain
-        tempContract.addService(uploadData.vin, tempCid);
-        setErrorMessage("complete");
+        try{
+            tempContract.addService(uploadData.vin, tempCid);
+            setErrorMessage("complete");
+        }
+        catch (e){
+            setErrorMessage("Error Occured while adding the service");
+            console.log(e);
+        }
     }
 
 
@@ -111,23 +131,26 @@ const Main = () => {
         let tempContract = new ethers.Contract(contractAddress, abi, tempSigner);
         
         //getting all cids
-        const cids = await tempContract.getServices(_vin);
-        console.log("cids ",cids);
-        console.log("leng of cids", cids.length);
+        try{
+            setErrorMessage("Getting data from blockchain!!");
+            const cids = await tempContract.getServices(_vin);
+            setErrorMessage("Done");
+            //download all files and storing it in a array
+            setErrorMessage("Grabbing files this might take longer please wait");
+            let result = []
+            for (let i = 0; i < cids.length; i++){
+                let temp = await retriveFiles(cids[i]);
+                console.log("temp",temp);
+                result.push(temp);
+            }
 
-        //download all files and storing it in a array
-        let result = []
-        for (let i = 0; i < cids.length; i++){
-            let temp = await retriveFiles(cids[i]);
-            console.log("temp",temp);
-            result.push(temp);
+            setOutData(result);
+            setErrorMessage("Finished");
         }
-
-        console.log("results : ", result[0].vin);
-        console.log(typeof(result));
-        setOutData(result);
-        setErrorMessage("Done");
-        console.log("outdata", outData);
+        catch(e){
+            setErrorMessage("Error occured");
+            console.log(e);
+        }
     }
 
     const retriveFiles = async (_cid) => {
@@ -155,8 +178,8 @@ const Main = () => {
             <div class="container">
                 <Tabs className="center-aligned-tabs">
                     <TabList className="tab-buttons">
-                        <Tab class="test">Search With VIN Number</Tab>
                         <Tab class="test">Add New Service Data</Tab>
+                        <Tab class="test">Search With VIN Number</Tab>
                     </TabList>
 
                     <TabPanel className="add-panel">
