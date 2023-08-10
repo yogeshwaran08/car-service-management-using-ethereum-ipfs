@@ -1,11 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
-import AddService from './AddService';
+import Main from './Main';
 
 function App() {
   return (
     <div className="App">
-      <AddService />
+      <Main />
     </div>
   );
 }
