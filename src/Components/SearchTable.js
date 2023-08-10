@@ -2,8 +2,8 @@ import React from 'react'
 
 const SearchTable = ({obj}) => {
   return (
-    <div style={{border : "1px solid black"}}>
-        <table class="searchElement">
+    <div>
+        <table style={{borderBottom:"1px solid white"}}class="searchElement">
             <tbody>
             <tr>
                 <td>VIN</td>

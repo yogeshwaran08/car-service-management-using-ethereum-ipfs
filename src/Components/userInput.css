@@ -1,0 +1,29 @@
+.label{
+    text-align: right;
+    padding-right: 10px;
+}
+
+#test{
+    column-span: 2;
+}
+
+.input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+    font-weight: 500;
+    width: 300px;
+    height: 20px;
+    font-size: 15px;
+}
+
+.submitBtn{
+    height: 30px;
+    width: 150px;
+    border-radius: 10px;
+    font-weight: 400;
+}
+
+
+

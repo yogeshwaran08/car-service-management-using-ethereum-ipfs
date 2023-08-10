@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import { Web3Storage } from 'web3.storage';
 import "./styles.css";
 import CarService_abi from "./truffle/build/contracts/CarServiceContract.json";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 import SearchTable from './Components/SearchTable';
 import UserInput from './Components/UserInput';
@@ -18,10 +20,11 @@ const Main = () => {
     // state vairbles
     const [btnTxt, setBtnTxt] = useState("Not Connected");
     const [outData, setOutData] = useState([]);
-    const [defaultAccount, setDefaultAccount] = useState("Not Connected");
+    const [defaultAccount, setDefaultAccount] = useState("Account not Connected");
     const [errorMesage, setErrorMessage] = useState("")
     const [cid, setCid] = useState("");
     const [searchVIN, setSearchVIN] = useState("");
+    const [tabIndex, setTabIndex] = useState();
     
     const [uploadData, setUploadData] = useState({
         vin : "",
@@ -147,33 +150,43 @@ const Main = () => {
 
     return (
         <div class="parent">
-            <NavBar address={defaultAccount} btnText={btnTxt} />
-            <div class="connectContainer">
-                <p>Address : {defaultAccount}</p>
-                <button onClick={handleConnectButton}>{btnTxt}</button>
-            </div>
+            <NavBar address={defaultAccount} btnText={btnTxt} handleConnectButton={handleConnectButton} />
 
-            <div class="interactionContainer">
-                <div class="left">
-                    <UserInput uploadData={uploadData} handleSubmit={handleSubmit} handleChange={handleChange}/>
-                </div>
+            <div class="container">
+                <Tabs className="center-aligned-tabs">
+                    <TabList className="tab-buttons">
+                        <Tab class="test">Search With VIN Number</Tab>
+                        <Tab class="test">Add New Service Data</Tab>
+                    </TabList>
 
-                <div class="right">
-                    <form onSubmit={getFiles}>
-                        <label>Enter the VIN number</label>
-                        <input type="text" name="searchVIN" value={searchVIN} onChange={handleSearchChange}/>
-                        <button type='submit'>Search</button>
-                    </form>
+                    <TabPanel className="add-panel">
+                        <div class="main-div">
+                            <UserInput uploadData={uploadData} 
+                                handleSubmit={handleSubmit}
+                                handleChange={handleChange}
+                                errorMessages={errorMesage}/>
+                        </div>
+                    </TabPanel>
+                    
+                    <TabPanel className="search-panel">
+                        <div class="main-div">
+                            <form onSubmit={getFiles}>
+                                <input type="text" 
+                                    name="searchVIN" 
+                                    value={searchVIN} 
+                                    onChange={handleSearchChange}
+                                    placeholder='Enter the VIN to Search'
+                                    class="searchVin"/>
+                                <button type='submit' class="searchBtn">Search</button>
+                            </form>
 
-                    <div class="scrollable">
-                        {outData.map((s,index) => (
-                        <SearchTable obj={s}/> ))}
-                    </div> 
-                </div>
-            </div>
-
-            <div>
-                <p class="connectContainer">{errorMesage}</p>
+                            <div class="scrollable">
+                                {outData.map((s,index) => (
+                                <SearchTable obj={s}/> ))}
+                            </div> 
+                        </div>
+                    </TabPanel>
+                </Tabs>
             </div>
         </div>
     )
