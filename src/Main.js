@@ -4,9 +4,13 @@ import { Web3Storage } from 'web3.storage';
 import "./styles.css";
 import CarService_abi from "./truffle/build/contracts/CarServiceContract.json";
 
+import SearchTable from './Components/SearchTable';
+import UserInput from './Components/UserInput';
+import NavBar from './Components/NavBar';
+
 const Main = () => {
     
-    const contractAddress = "0x17DB399f5595266FbF66De03A9837Aa771E30E79";
+    const contractAddress = "0x39FAe01424Ed9720B084D29f265332389423C10D";
     const abi = CarService_abi.abi;
     //web3.storage api token
     const web3StorageApi = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUxZDIxNmY4YWE0RmNGMDFCODE4RkMyQTgyMDAyQjhBQ0ExMjMxQjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTE1Njk1Njc1NjAsIm5hbWUiOiJDYXJTZXJ2aWNlIn0.0ynNnu9b1__XYH_CYB9AeymkOD67gIIDGrGKQsqQBGw";
@@ -141,154 +145,35 @@ const Main = () => {
           }
     }
 
-    
-
-
     return (
-        <div class="basic">
+        <div class="parent">
+            <NavBar address={defaultAccount} btnText={btnTxt} />
             <div class="connectContainer">
                 <p>Address : {defaultAccount}</p>
                 <button onClick={handleConnectButton}>{btnTxt}</button>
             </div>
-            <div class="parent">
-            <div class="left">
-            <form onSubmit={handleSubmit}>
-                <table>
-                    <tbody>                    
-                    <tr>
-                        <td><label>VIN</label></td>
-                        <td><input type='text' name="vin" value={uploadData.vin} onChange={handleChange}></input></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><label>Model Type</label></td>
-                        <td><input type='text' name="model_type" value={uploadData.model_type} onChange={handleChange}></input></td>
-                    </tr>
 
-                    <tr>   
-                        <td><label>Version</label></td>
-                        <td><input type='text' name="version" value={uploadData.version} onChange={handleChange}></input></td>
-                    </tr>
+            <div class="interactionContainer">
+                <div class="left">
+                    <UserInput uploadData={uploadData} handleSubmit={handleSubmit} handleChange={handleChange}/>
+                </div>
 
-                    <tr>    
-                        <td><label>Color</label></td>
-                        <td><input type='text' name="color" value={uploadData.color} onChange={handleChange}></input></td>
-                    </tr>
+                <div class="right">
+                    <form onSubmit={getFiles}>
+                        <label>Enter the VIN number</label>
+                        <input type="text" name="searchVIN" value={searchVIN} onChange={handleSearchChange}/>
+                        <button type='submit'>Search</button>
+                    </form>
 
-                    <tr>
-                        <td><label>Country</label></td>
-                        <td><input type='text' name='country' value={uploadData.country} onChange={handleChange}></input></td>
-                    </tr>
-
-                    <tr>
-                        <td><label>Dealer Code</label></td>
-                        <td><input type='text' value={uploadData.dealer_code} name="dealer_code" onChange={handleChange}></input></td>
-                    </tr>
-
-                    <tr>
-                        <td><label>Dealer</label></td>
-                        <td><input type='text' value={uploadData.dealer} name="dealer" onChange={handleChange}></input></td>
-                    </tr>
-
-                    <tr>
-                        <td><label>RO</label></td>
-                        <td><input type='text' value={uploadData.ro} name="ro" onChange={handleChange}></input></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><label>Odometer</label></td>
-                        <td><input type='number' value={uploadData.odometer} name="odometer" onChange={handleChange}></input></td>
-                    </tr>
-
-                    <tr>
-                        <td><label>Part Number</label></td>
-                        <td><input type='text' value={uploadData.part_number} name='part_number' onChange={handleChange}></input></td>
-                    </tr>
-
-                    <tr>
-                        <td><label>Part Name</label></td>
-                        <td><input type='text' value={uploadData.part_name} name="part_name" onChange={handleChange}></input></td>
-                    </tr>
-
-                    <tr>
-                        <td><label>Technician Description</label></td>
-                        <td><input type='text' value={uploadData.technician_description} name="technician_description" onChange={handleChange}></input></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button type='submit'>Add Service</button>
-            </form>
-            </div>
-
-            <div class="right">
-
-                <form onSubmit={getFiles}>
-                    <label>Enter the VIN number</label>
-                    <input type="text" name="searchVIN" value={searchVIN} onChange={handleSearchChange}/>
-                    <button type='submit'>Search</button>
-                </form>
                     <div class="scrollable">
                         {outData.map((s,index) => (
-                            <div style={{border : "1px solid black"}}>
-                                <table class="searchElement">
-                                    <tbody>
-                                    <tr>
-                                        <td>VIN</td>
-                                        <td>{s.vin}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Model Types</td>
-                                        <td>{s.model_type}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Version</td>
-                                        <td>{s.version}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>color</td>
-                                        <td>{s.color}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Country</td>
-                                        <td>{s.country}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dealer Code</td>
-                                        <td>{s.dealer_code}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dealer</td>
-                                        <td>{s.dealer}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>RO</td>
-                                        <td>{s.ro}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Odometer</td>
-                                        <td>{s.odometer}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Part Number</td>
-                                        <td>{s.part_number}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Part Name</td>
-                                        <td>{s.part_name}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Technician Description</td>
-                                        <td>{s.technician_description}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        ))}
-                    </div>
-                    
+                        <SearchTable obj={s}/> ))}
+                    </div> 
+                </div>
             </div>
-            {/* <p>{errorMesage}</p> */}
 
+            <div>
+                <p class="connectContainer">{errorMesage}</p>
             </div>
         </div>
     )

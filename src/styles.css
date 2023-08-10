@@ -1,42 +1,13 @@
-.basic{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
+html,body{
+    height: 100%;   
+}
+
+#root{
     height: 100%;
-    background-color: aqua;
 }
 
-.connectContainer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding-bottom: 40px;
+.full{
+    height: 100%;
+    width: 100%;
 }
 
-.parent{
-    width: 900px;
-    height: 600px;
-    margin: auto;
-    display: flex;
-    justify-content: space-between;
-}
-
-.left{
-    width: 50%;
-}
-.right{
-    width: 50%;
-}
-
-.scrollable{
-    overflow-y: scroll;
-    height: 400px;
-}
-
-.searchElement{
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
