@@ -84,10 +84,13 @@ const Main = () => {
         }
     }
 
+    window.ethereum.on('accountsChanged', handleConnectButton);
+
+    
     const handAccountChange =  (request) => {
         setDefaultAccount(request);
         setBtnTxt("Connected");
-        setErrorMessage("Connected")
+        setErrorMessage("Connected");
     }
 
     const uploadFiles = async () => {
